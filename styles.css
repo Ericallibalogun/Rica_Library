@@ -125,6 +125,7 @@ body {
 
 .form-group {
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .form-group label {
@@ -397,4 +398,70 @@ body {
   100% {
     content: "";
   }
+}
+
+/* Responsive adjustments for manage books */
+@media (max-width: 768px) {
+  .borrow-return-container,
+  .manage-books-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Book Suggestions Dropdown */
+.suggestions-container {
+  position: relative;
+  background: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  z-index: 100;
+}
+
+.suggestions-container.show {
+  display: block;
+}
+
+.suggestion-item {
+  padding: 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.suggestion-item:hover {
+  background-color: #f8f9fa;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item .book-title {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.suggestion-item .book-author {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.suggestion-item .book-copies {
+  font-size: 0.8rem;
+  color: #28a745;
+  margin-top: 0.25rem;
+}
+
+/* Loading indicator for suggestions */
+.suggestions-loading {
+  padding: 1rem;
+  text-align: center;
+  color: #666;
+  font-style: italic;
 }
