@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">📚 Library System</h1>
+            <div class="nav-menu">
+                <button class="nav-btn" onclick="showSection('auth')">Login</button>
+                <button class="nav-btn" onclick="showSection('search')">Search Books</button>
+                <button class="nav-btn" onclick="showSection('borrow')">Borrow/Return</button>
+                <button class="nav-btn librarian-only" onclick="showSection('manage')" style="display: none;">Manage Books</button>
+                <button class="nav-btn" id="logoutBtn" onclick="logout()" style="display: none;">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Message -->
+        <div id="welcomeMessage" class="welcome-message" style="display: none;">
+            <h2>Welcome, <span id="userName"></span>!</h2>
+            <p>Select an option from the navigation menu to get started.</p>
+        </div>
+
+        <!-- Authentication Section -->
+        <section id="authSection" class="section active">
+            <div class="auth-container">
+                <!-- Login Form -->
+                <div id="loginForm" class="form-container">
+                    <h2>Login</h2>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="loginEmail">Email:</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password:</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    <p class="switch-form">Don't have an account? <a href="#" onclick="toggleAuthForm()">Register here</a></p>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="form-container" style="display: none;">
+                    <h2>Register</h2>
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label for="registerFullName">Full Name:</label>
+                            <input type="text" id="registerFullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email:</label>
+                            <input type="email" id="registerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPhone">Phone Number:</label>
+                            <input type="tel" id="registerPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password:</label>
+                            <input type="password" id="registerPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerRole">Role:</label>
+                            <select id="registerRole" required>
+                                <option value="">Select Role</option>
+                                <option value="USER">User</option>
+                                <option value="LIBRARIAN">Librarian</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                    <p class="switch-form">Already have an account? <a href="#" onclick="toggleAuthForm()">Login here</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Books Section -->
+        <section id="searchSection" class="section">
+            <div class="container">
+                <h2>Search Books</h2>
+                <div class="search-container">
+                    <input type="text" id="searchQuery" placeholder="Search by title, author, or category..." class="search-input">
+                    <button onclick="searchBooks()" class="btn btn-primary">Search</button>
+                </div>
+                <div id="searchResults" class="results-container"></div>
+            </div>
+        </section>
+
+        <!-- Borrow/Return Section -->
+        <section id="borrowSection" class="section">
+            <div class="container">
+                <div class="borrow-return-container">
+                    <!-- Borrow Book -->
+                    <div class="form-container">
+                        <h2>Borrow Book</h2>
+                        <form onsubmit="handleBorrowBook(event)">
+                            <div class="form-group">
+                                <label for="borrowBookId">Book ID:</label>
+                                <input type="number" id="borrowBookId" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="borrowUserId">User ID:</label>
+                                <input type="number" id="borrowUserId" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Borrow Book</button>
+                        </form>
+                    </div>
+
+                    <!-- Return Book -->
+                    <div class="form-container">
+                        <h2>Return Book</h2>
+                        <form onsubmit="handleReturnBook(event)">
+                            <div class="form-group">
+                                <label for="returnBorrowId">Borrow ID:</label>
+                                <input type="number" id="returnBorrowId" required>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Return Book</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manage Books Section (Librarian Only) -->
+        <section id="manageSection" class="section">
+            <div class="container">
+                <div class="manage-books-container">
+                    <!-- Add Book -->
+                    <div class="form-container">
+                        <h2>Add New Book</h2>
+                        <form onsubmit="handleAddBook(event)">
+                            <div class="form-group">
+                                <label for="addTitle">Title:</label>
+                                <input type="text" id="addTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="addAuthor">Author:</label>
+                                <input type="text" id="addAuthor" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="addCategory">Category:</label>
+                                <input type="text" id="addCategory" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="addCopies">Available Copies:</label>
+                                <input type="number" id="addCopies" min="1" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Book</button>
+                        </form>
+                    </div>
+
+                    <!-- Update Book -->
+                    <div class="form-container">
+                        <h2>Update Book</h2>
+                        <form onsubmit="handleUpdateBook(event)">
+                            <div class="form-group">
+                                <label for="updateBookId">Book ID:</label>
+                                <input type="number" id="updateBookId" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="updateTitle">Title:</label>
+                                <input type="text" id="updateTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="updateAuthor">Author:</label>
+                                <input type="text" id="updateAuthor" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="updateCategory">Category:</label>
+                                <input type="text" id="updateCategory" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="updateCopies">Available Copies:</label>
+                                <input type="number" id="updateCopies" min="0" required>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Update Book</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Message Display -->
+    <div id="messageContainer" class="message-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
