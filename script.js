@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function showSection(sectionName) {
   document.querySelectorAll(".section").forEach(section =>
+    
     section.classList.remove("active")
   )
   const target = document.getElementById(sectionName + "Section")
